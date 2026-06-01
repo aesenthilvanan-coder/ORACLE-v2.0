@@ -1,0 +1,5 @@
+# TCD Training Configuration
+n_epochs: 500
+batch_size: 32
+learning_rate: 1.0e-4
+n_diffusion_steps: 1000

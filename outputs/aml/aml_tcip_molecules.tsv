@@ -1,0 +1,5 @@
+tf_name	perturbation	corepressor	linker	MW	logP	Ro5	SMILES
+NPM1	repression	EZH2	PEG2	755.3	4.68	True	CN(C)c1ccc(C(C)(CNC(=O)c2ccc(CN3CC(=O)N(c4ccc(Cl)cc4)CC3=O)cc2)COCCOCCOc2ccc(C(N)=O)cc2)cc1
+CEBPE	repression	EZH2	PEG2	755.3	4.68	True	CN(C)c1ccc(C(C)(CNC(=O)c2ccc(CN3CC(=O)N(c4ccc(Cl)cc4)CC3=O)cc2)COCCOCCOc2ccc(C(N)=O)cc2)cc1
+CDK1	repression	EZH2	PEG2	755.3	4.68	True	CN(C)c1ccc(C(C)(CNC(=O)c2ccc(CN3CC(=O)N(c4ccc(Cl)cc4)CC3=O)cc2)COCCOCCOc2ccc(C(N)=O)cc2)cc1
+CDK6	repression	EZH2	PEG2	845.3	5.99	True	CN(C)c1ccc(C(C)(CNC(=O)c2ccc(CN3CC(=O)N(c4ccc(Cl)cc4)CC3=O)cc2)COCCOCCOc2cnc(Nc3ccc4[nH]cnc4c3)nc2)cc1

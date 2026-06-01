@@ -1,0 +1,79 @@
+# ORACLE Base Configuration
+
+cancer_type: "colorectal"  # Options: colorectal, aml, breast, lung, glioblastoma, melanoma
+tissue: "colon"
+patient_id: "PATIENT_001"
+
+output_dir: "./outputs"
+log_dir: "./logs"
+checkpoint_dir: "./checkpoints"
+cache_dir: "./cache"
+
+device: "mps"  # M1 Mac GPU: use 'mps', fallback 'cpu'
+seed: 42
+n_jobs: 8  # Parallel CPU workers for Boolean simulation
+
+cam:
+  # Preprocessing
+  min_genes: 200
+  min_cells: 3
+  max_pct_mt: 20.0
+  n_top_genes: 3000
+  n_pcs: 50
+  n_neighbors: 15
+
+  # GRN inference
+  grn_size: 100  # Number of genes in core GRN
+  data_weight: 0.6  # Weight for data-driven GRN
+  prior_weight: 0.4  # Weight for curated GRN
+  min_confidence: 0.3  # Minimum edge confidence threshold
+
+  # Boolean network
+  n_attractor_samples: 10000  # Random initial states for attractor finding
+  n_basin_samples: 50000  # Samples for basin size estimation
+  max_trajectory_steps: 1000  # Max steps per trajectory
+
+  # Continuous ODE
+  integration_time: 50.0  # ODE integration time
+  n_ode_steps: 200  # Steps for ODE integration
+
+  # MD simulation
+  md_frames: 100  # Frames to sample per protein
+
+rsp:
+  # GNN architecture
+  hidden_dim: 256
+  n_gnn_layers: 6
+  n_attention_heads: 8
+
+  # Optimization
+  max_perturbations: 5  # Max TF switches to design
+  target_cancer_score: 0.3  # Target: score below this = success
+  normal_threshold: 0.3  # Threshold for "normal" state
+  validation_trajectories: 100  # ODE trajectories for validation
+  integration_time: 100.0
+  n_steps: 500
+
+  # Checkpoint
+  checkpoint_path: "./checkpoints/rsp_gnn.pt"
+
+tcd:
+  # Molecule generation
+  mol_hidden_dim: 256
+  mol_n_layers: 8
+  n_diffusion_steps: 1000
+  distance_cutoff: 10.0  # Angstroms, for building molecular graphs
+  n_warhead_atoms: 25  # Target warhead size
+  n_warhead_candidates: 50  # Candidates to generate per TF
+
+  # Validation thresholds
+  max_clash_score: 10.0
+  max_interface_energy: -5.0  # kcal/mol
+  max_sa_score: 6.0
+
+  # Checkpoint
+  checkpoint_path: "./checkpoints/tcd_diffusion.pt"
+
+  # External tools
+  fpocket_path: "/usr/local/bin/fpocket"
+  openmm_platform: "CPU"  # M1: 'CPU' or 'OpenCL'

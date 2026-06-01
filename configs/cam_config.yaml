@@ -1,0 +1,17 @@
+# CAM Module Configuration
+min_genes: 200
+min_cells: 3
+max_pct_mt: 20.0
+n_top_genes: 3000
+n_pcs: 50
+n_neighbors: 15
+grn_size: 100
+data_weight: 0.6
+prior_weight: 0.4
+min_confidence: 0.3
+n_attractor_samples: 10000
+n_basin_samples: 50000
+max_trajectory_steps: 1000
+integration_time: 50.0
+n_ode_steps: 200
+md_frames: 100

@@ -1,0 +1,193 @@
+16:15:32  [INFO]  oracle.luad_pipeline — ============================================================
+16:15:32  [INFO]  oracle.luad_pipeline — ORACLE LUAD PIPELINE — START
+16:15:32  [INFO]  oracle.luad_pipeline — Cancer: Lung Adenocarcinoma (LUAD)
+16:15:32  [INFO]  oracle.luad_pipeline — Context: KRAS G12C + STK11 loss + TP53 mutation
+16:15:32  [INFO]  oracle.luad_pipeline — Data: GSE131907 (Kim et al. 2020, Nat Comm)
+16:15:32  [INFO]  oracle.luad_pipeline — ============================================================
+16:15:33  [INFO]  oracle.luad_pipeline — Loading cached GSE131907 AnnData: data/luad/gse131907/luad_anndata_panel.h5ad
+/opt/homebrew/Caskroom/miniforge/base/lib/python3.13/site-packages/anndata/_core/anndata.py:1823: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+16:15:33  [INFO]  oracle.luad_pipeline — Loaded: 6000 cells × 65 genes  (cancer=3000, normal=3000)
+16:15:33  [INFO]  oracle.luad_pipeline — LUAD GRN: 65 nodes, 705 edges  (curated=112, data-driven=593)
+16:15:35  [WARNING]  oracle.cam.continuous_ode — torchdiffeq not available; using fixed-step RK4 integrator fallback.
+16:15:35  [INFO]  oracle.luad_pipeline — === MODULE 1: Cancer Attractor Mapper ===
+16:15:35  [INFO]  oracle.cam.boolean_network — BooleanNetworkSimulator initialized: 65 genes, 705 edges.
+16:15:35  [INFO]  oracle.luad_pipeline — Enforced KRAS=1 in cancer attractor (G12C activating mutation)
+16:15:35  [INFO]  oracle.luad_pipeline — Enforced STK11=0 in cancer attractor (loss-of-function)
+16:15:35  [INFO]  oracle.luad_pipeline — Validating attractors via Boolean dynamics on 65-node GRN...
+16:15:35  [INFO]  oracle.luad_pipeline — Attractor validation: 0.0 s
+16:15:35  [INFO]  oracle.luad_pipeline — Cancer basin: 50.0%  |  Normal basin: 50.0%  (from data)
+16:15:35  [INFO]  oracle.luad_pipeline — Cancer attractor: 44 genes ON, oncogenes_active=['MYC', 'YAP1', 'WWTR1', 'SNAI2', 'ZEB1', 'SOX9', 'E2F1', 'FOSL1', 'TEAD1'], KRAS=ON, STK11=OFF
+16:15:35  [INFO]  oracle.luad_pipeline — Normal attractor: 38 genes ON, AT2_TFs_active=['FOXA2', 'ETV5']
+16:15:38  [INFO]  oracle.luad_pipeline — === MODULE 2: Reversion Switch Predictor ===
+16:15:38  [INFO]  oracle.cam.continuous_ode — ContinuousGRNDynamics initialized: 65 genes.
+16:15:38  [INFO]  oracle.luad_pipeline — Loading cached LUAD cancer score checkpoint: checkpoints/cancer_score_luad.pt
+16:15:38  [INFO]  oracle.luad_pipeline — Cached model — cancer=0.8681, normal=0.7782
+16:15:38  [INFO]  oracle.rsp.switch_optimizer — Optimization candidates: 34 (TF, type) pairs
+16:15:38  [INFO]  oracle.rsp.switch_optimizer — Starting switch set optimization...
+16:15:38  [INFO]  oracle.rsp.switch_optimizer — Top gradient candidates: [('NKX2-1', 1), ('SOX9', 1), ('HDAC1', 0), ('ZEB2', 1), ('FOXA1', 1), ('FOSL1', 0), ('MYC', 0), ('FOXA2', 0), ('E2F1', 0), ('EZH2', 0)]
+16:15:38  [INFO]  oracle.rsp.switch_optimizer — Beam search depth 2: best score = 0.961, reversion = 3.9%
+16:15:38  [INFO]  oracle.rsp.switch_optimizer — Beam search depth 3: best score = 0.941, reversion = 5.9%
+16:15:39  [INFO]  oracle.rsp.switch_optimizer — Beam search depth 4: best score = 0.920, reversion = 8.0%
+16:15:39  [INFO]  oracle.rsp.switch_optimizer — Beam search depth 5: best score = 0.899, reversion = 10.1%
+16:15:39  [INFO]  oracle.rsp.switch_optimizer — Validating best solution with ODE simulation...
+16:15:39  [INFO]  oracle.rsp.perturbation_sim — Perturbation act=[2] rep=[52, 13, 12, 49] | mean_score=0.7988 rev_frac=0.000 delta=-0.0693
+16:15:39  [INFO]  oracle.rsp.switch_optimizer — Validated reversion fraction: 0.0%
+16:15:39  [INFO]  oracle.rsp.switch_optimizer — Validated mean cancer score: 0.799
+16:15:39  [INFO]  oracle.rsp.switch_optimizer — Genes to activate: ['FOXA2']
+16:15:39  [INFO]  oracle.rsp.switch_optimizer — Genes to repress: ['BRD4', 'WWTR1', 'YAP1', 'EZH2']
+16:15:39  [INFO]  oracle.luad_pipeline — RSP complete in 1.0 s
+16:15:39  [INFO]  oracle.luad_pipeline —   ACTIVATE: ['FOXA2']
+16:15:39  [INFO]  oracle.luad_pipeline —   REPRESS:  ['BRD4', 'WWTR1', 'YAP1', 'EZH2']
+16:15:39  [INFO]  oracle.luad_pipeline — Boolean validation of switch set...
+16:15:39  [INFO]  oracle.luad_pipeline — Boolean validation: 0.0% reversion (0/80 trials)
+16:15:39  [INFO]  oracle.luad_pipeline — === MODULE 3: TCIP Design ===
+16:15:40  [INFO]  oracle.tcd.linker_designer — Selected linker H2N_PEG3_COOH (score=0.500, length=10.5Å, required=32.0Å)
+16:15:40  [INFO]  oracle.tcd.tcip_assembler — Assembled TCIP [tier4_func_wh_cooh]: MW=880.0 LogP=2.65 QED=0.048 connected=True
+16:15:40  [INFO]  oracle.luad_pipeline —   TCIP designed: BRD4 (REPRESS) → HDAC1 | MW=880 QED=0.05 TPSA=236 SAS=4.2 | PASS
+16:15:40  [INFO]  oracle.tcd.linker_designer — Selected linker H2N_PEG3_COOH (score=0.757, length=10.5Å, required=12.5Å)
+16:15:40  [INFO]  oracle.tcd.tcip_assembler — Assembled TCIP [tier4_func_wh_cooh]: MW=764.9 LogP=5.03 QED=0.103 connected=True
+16:15:40  [INFO]  oracle.luad_pipeline —   TCIP designed: WWTR1 (REPRESS) → EZH2 | MW=765 QED=0.10 TPSA=162 SAS=3.1 | PASS
+16:15:40  [INFO]  oracle.tcd.linker_designer — Selected linker H2N_PEG3_COOH (score=0.803, length=10.5Å, required=12.0Å)
+16:15:40  [INFO]  oracle.tcd.tcip_assembler — Assembled TCIP [tier4_func_wh_cooh]: MW=743.8 LogP=3.50 QED=0.145 connected=True
+16:15:40  [INFO]  oracle.luad_pipeline —   TCIP designed: YAP1 (REPRESS) → EZH2 | MW=744 QED=0.15 TPSA=177 SAS=3.1 | PASS
+16:15:40  [INFO]  oracle.tcd.linker_designer — Selected linker H2N_PEG3_COOH (score=0.501, length=10.5Å, required=30.5Å)
+16:15:40  [INFO]  oracle.tcd.tcip_assembler — Assembled TCIP [tier4_func_wh_cooh]: MW=718.8 LogP=1.00 QED=0.080 connected=True
+16:15:40  [INFO]  oracle.luad_pipeline —   TCIP designed: EZH2 (REPRESS) → HDAC1 | MW=719 QED=0.08 TPSA=196 SAS=3.2 | PASS
+16:15:40  [INFO]  oracle.tcd.linker_designer — Selected linker H2N_PEG2_COOH (score=1.000, length=8.0Å, required=8.0Å)
+16:15:40  [INFO]  oracle.tcd.tcip_assembler — Assembled TCIP [tier4_func_wh_cooh]: MW=714.8 LogP=5.67 QED=0.073 connected=True
+16:15:40  [INFO]  oracle.luad_pipeline —   TCIP designed: FOXA2 (ACTIVATE) → p300 | MW=715 QED=0.07 TPSA=171 SAS=3.0 | PASS
+16:15:40  [INFO]  oracle.luad_pipeline —   NOTE: KRAS G12C is a genetic event — no TCIP possible. Sotorasib (AMG-510) or adagrasib (MRTX849) recommended as companion therapy.
+16:15:40  [INFO]  oracle.luad_pipeline — Total TCIPs designed: 5
+16:15:40  [INFO]  oracle.luad_pipeline — === Generating ORACLE LUAD Report ===
+/Users/TheAES/Desktop/ORACLE/scripts/run_luad_pipeline.py:1244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+16:15:40  [INFO]  oracle.luad_pipeline — Text report: outputs/luad/luad_oracle_report.txt
+16:15:40  [INFO]  oracle.luad_pipeline — JSON report: outputs/luad/luad_oracle_report.json
+16:15:40  [INFO]  oracle.luad_pipeline — TCIP molecules TSV: outputs/luad/luad_tcip_molecules.tsv
+16:15:40  [INFO]  oracle.luad_pipeline — ============================================================
+16:15:40  [INFO]  oracle.luad_pipeline — ORACLE LUAD PIPELINE — COMPLETE  (7.7 s)
+16:15:40  [INFO]  oracle.luad_pipeline — Outputs: outputs/luad
+16:15:40  [INFO]  oracle.luad_pipeline — ============================================================
+
+======================================================================
+ORACLE V2.0 — LUAD Epigenetic Reversion Report
+Generated: 2026-05-26 20:15 UTC
+Runtime:   7.7 s
+======================================================================
+
+CANCER TYPE:  Lung Adenocarcinoma (LUAD)
+PRIMARY DATA: GSE131907 (Kim et al. 2020, Nat Comm; 208,506 cells)
+GENETIC CONTEXT:
+  • KRAS G12C/D/V — constitutively active (40% of LUAD)
+    ⚠  Cannot be epigenetically rescued; recommend sotorasib/adagrasib
+  • STK11/LKB1 — loss of function (dysregulates Hippo/YAP axis)
+  • TP53 — hotspot mutation (partial loss; ~50% co-occurrence)
+
+──────────────────────────────────────────────────────────────────────
+MODULE 1 — Cancer Attractor Mapper (CAM)
+──────────────────────────────────────────────────────────────────────
+  Boolean attractors found:   2
+  Cancer basin size:          50.0%
+  Normal basin size:          50.0%
+
+  Cancer attractor active oncogenes:
+    MYC          ON 
+    YAP1         ON 
+    WWTR1        ON 
+    SNAI2        ON 
+    ZEB1         ON 
+    ZEB2         off
+    TWIST1       off
+    SOX9         ON 
+    E2F1         ON 
+    FOSL1        ON 
+    TEAD1        ON 
+
+  Normal (AT2) attractor differentiation TFs:
+    NKX2-1       off
+    FOXA1        off
+    FOXA2        ON 
+    ETV5         ON 
+    SFTPC        ON 
+    SFTPB        ON 
+    ABCA3        ON 
+
+──────────────────────────────────────────────────────────────────────
+MODULE 2 — Reversion Switch Predictor (RSP)
+──────────────────────────────────────────────────────────────────────
+  Predicted reversion prob:    10.1%
+  ODE-validated reversion:     0.0%
+  Boolean reversion:           0.0%
+  Predicted cancer score after: 0.799
+
+  GENES TO ACTIVATE (restore AT2 identity):
+    FOXA2           importance=1.000
+
+  GENES TO REPRESS (silence oncogenic program):
+    BRD4            importance=1.000
+    WWTR1           importance=1.000
+    YAP1            importance=1.000
+    EZH2            importance=1.000
+
+──────────────────────────────────────────────────────────────────────
+MODULE 3 — TCIP Design
+──────────────────────────────────────────────────────────────────────
+  Total TCIP molecules designed: 5
+  Hard constraints passed:       5/5
+
+  Hard constraints (TCIP/bRo5 relaxed — must pass ALL):
+    1. Lipinski Ro5     MW<=1000, logP<=6, HBD<=6, HBA<=15 (>= 3/4)
+    2. Veber            RotBonds<=25, TPSA<=250 A^2
+    3. Ghose Filter     MW 160-1000, logP -0.4 to 6.0, MR 40-300, atoms 20-120
+    4. Egan             logP<=7, TPSA<=250 A^2
+    5. QED >= 0.04 (bifunctionals inherently score 0.04-0.25)
+    6. Linker atoms     5-20 heavy atoms
+    7. SAS <= 7.0
+    8. PAINS filter     no pan-assay interference substructures
+    9. Brenk filter     no reactive/toxic groups (PEG/hydroxamate whitelisted)
+   10. Ames alerts      no mutagenicity structural alerts (indole whitelisted)
+
+  [REPRESS] BRD4 -> HDAC1  [PASS]
+    TCIP SMILES: Cc1sc2ccccc2c1-c1cc2nc(C)n(CC(=O)N3CCC[C@H]3C(=O)N(CC(=O)NCCOCCOCCC(=O)NC(=O)CCCCCCC(=O)NO)C(C)C)c(=O)n2n1
+    MW=880.0  logP=2.65  TPSA=236  QED=0.05  SAS=4.2  HBD=4  HBA=13  RotB=23  Ro5=PASS
+    Rationale: Repress BRD4 in LUAD: warhead binds BRD4 TF/enzymatic pocket; linker bridges to HDAC1 recruiter for epigenetic silencing at BRD4 target loci.
+
+  [REPRESS] WWTR1 -> EZH2  [PASS]
+    TCIP SMILES: CC(=O)Nc1ccc(C(=O)N2CCC(NC(=O)CCOCCOCCNC(=O)CN(C(=O)c3ccc4[nH]c5ccccc5c4c3)c3ccc(F)cc3)CC2)cc1
+    MW=764.9  logP=5.03  TPSA=162  QED=0.10  SAS=3.1  HBD=4  HBA=7  RotB=16  Ro5=PASS
+    Rationale: Repress WWTR1 in LUAD: warhead binds WWTR1 TF/enzymatic pocket; linker bridges to EZH2 recruiter for epigenetic silencing at WWTR1 target loci.
+
+  [REPRESS] YAP1 -> EZH2  [PASS]
+    TCIP SMILES: CC(=O)Nc1ccc(C(=O)N2CCC(NC(=O)CCOCCOCCNC(=O)CN(C(=O)c3cccc(F)c3)c3cc(=O)c4ccccc4o3)CC2)cc1
+    MW=743.8  logP=3.50  TPSA=177  QED=0.15  SAS=3.1  HBD=3  HBA=9  RotB=16  Ro5=PASS
+    Rationale: Repress YAP1 in LUAD: warhead binds YAP1 TF/enzymatic pocket; linker bridges to EZH2 recruiter for epigenetic silencing at YAP1 target loci.
+
+  [REPRESS] EZH2 -> HDAC1  [PASS]
+    TCIP SMILES: CC(=O)N(CC(=O)NCCOCCOCCC(=O)NC(=O)CCCCCCC(=O)NO)c1ccc(C(=O)N2CCC(N3CCOCC3)CC2)cc1
+    MW=718.8  logP=1.00  TPSA=196  QED=0.08  SAS=3.2  HBD=4  HBA=11  RotB=21  Ro5=PASS
+    Rationale: Repress EZH2 in LUAD: warhead binds EZH2 TF/enzymatic pocket; linker bridges to HDAC1 recruiter for epigenetic silencing at EZH2 target loci.
+
+  [ACTIVATE] FOXA2 -> p300  [PASS]
+    TCIP SMILES: O=C(CN(C(=O)c1cccnc1)c1ccc(F)cc1)NCCOCCCC(=O)Nc1ccc(C(=O)c2ccc(Nc3ncnc4[nH]ccc34)cc2)cc1
+    MW=714.8  logP=5.67  TPSA=171  QED=0.07  SAS=3.0  HBD=4  HBA=9  RotB=16  Ro5=PASS
+    Rationale: Activate FOXA2 in LUAD AT2 redifferentiation: warhead tethers to FOXA2 promoter region; p300 recruiter deposits H3K27ac to reopen AT2 gene loci silenced by EZH2/HDAC1.
+
+──────────────────────────────────────────────────────────────────────
+THERAPEUTIC STRATEGY SUMMARY
+──────────────────────────────────────────────────────────────────────
+The ORACLE analysis identifies a minimal TF perturbation set to
+drive KRAS-mutant LUAD cells from the cancer Waddington attractor
+back toward the AT2 (alveolar type II) normal lung identity.
+
+Recommended combination approach:
+  1. KRAS G12C: Sotorasib (AMG-510) or Adagrasib (MRTX849) — direct
+     KRAS G12C covalent inhibitor as companion.
+  2. TCIPs targeting the epigenetic switch set above — bifunctional
+     molecules that simultaneously silence oncogenic TFs and re-activate
+     NKX2-1/FOXA1/FOXA2 AT2 identity programme.
+  3. EZH2 inhibitor (EPZ-6438/tazemetostat) to remove H3K27me3
+     from NKX2-1/SFTPC loci silenced during dedifferentiation.
+
+Pipeline completed in 7.7 s
+======================================================================

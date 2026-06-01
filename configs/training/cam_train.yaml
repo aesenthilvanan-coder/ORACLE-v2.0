@@ -1,0 +1,8 @@
+# CAM Training Configuration
+n_epochs: 100
+batch_size: 256
+learning_rate: 1.0e-3
+weight_decay: 1.0e-4
+n_genes: 100
+smoothness_weight: 0.01
+monotonicity_weight: 0.1

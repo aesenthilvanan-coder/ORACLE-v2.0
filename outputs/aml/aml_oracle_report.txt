@@ -1,0 +1,124 @@
+══════════════════════════════════════════════════════════════════════════════
+  ORACLE PIPELINE — FULL EXECUTION REPORT
+  Cancer Type : Acute Myeloid Leukemia (AML)
+  Run Date    : 2026-05-21 14:49:00
+══════════════════════════════════════════════════════════════════════════════
+
+┌─ INPUT DATASET ─────────────────────────────────────────────────────────┐
+│  Source      : CellxGene — 15 leukemic bone marrow donors              │
+│  Cells       : 31,586  (AML + APL)                                   │
+│  Gene panel  :    458  targeted genes (BD Rhapsody)              │
+│  AML blasts  : 11,077  (early/late promyelocytes, myelocytes)     │
+│  Normal      : 11,520  (classical + non-classical monocytes)      │
+│  Transitional:  8,989  (HSC/MPP, progenitors, cDC)              │
+│  Genotypes   : FLT3-ITD/NPM1+, FLT3-wt/NPM1+, APL (PML-RARA)         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+──────────────────────────────────────────────────────────────────────────────
+  MODULE 1 — CANCER ATTRACTOR MAPPER (CAM)
+──────────────────────────────────────────────────────────────────────────────
+  GRN: 458 nodes × 402 edges
+  Method: Curated AML literature edges + expression-correlation edges
+  Attractor sampling: 2 Boolean fixed-point attractors found
+  Runtime: 13.4s (attractor) + 6.8s (basin estimation)
+
+  ATTRACTOR LANDSCAPE:
+  Attractor #0: 309 genes ON  |  cancer_score=1.000  normal_score=0.667  |  basin=87.8% ◄── CANCER ATTRACTOR
+  Attractor #1: 97 genes ON  |  cancer_score=0.200  normal_score=0.667  |  basin=12.2% ◄── NORMAL ATTRACTOR
+
+  Cancer attractor: oncogenic TFs ON  → ['MEIS1', 'LMO2', 'BCL11A', 'SOX4', 'CDK6']
+  Cancer attractor: suppressors ON    → ['CEBPA', 'CEBPE']
+  Normal attractor: suppressors ON    → ['CEBPA', 'IRF8']
+  Normal attractor: oncogenic TFs ON  → ['LMO2']
+
+──────────────────────────────────────────────────────────────────────────────
+  MODULE 2 — REVERSION SWITCH PREDICTOR (RSP)
+──────────────────────────────────────────────────────────────────────────────
+  Algorithm: Greedy forward selection + ODE validation
+  Total perturbations selected: 4
+
+  ┌─ MINIMAL SWITCH SET ──────────────────────────────────────────────────┐
+  │  REPRESS  (recruit epigenetic corepressor via TCIP):                  │
+  │    ▼ NPM1          importance=0.2500                              │
+  │    ▼ CEBPE         importance=0.2500                              │
+  │    ▼ CDK1          importance=0.2500                              │
+  │    ▼ CDK6          importance=0.2500                              │
+  └───────────────────────────────────────────────────────────────────────┘
+
+  Predicted reversion probability (GNN/heuristic): 0.0%
+  ODE trajectory validation:                        0.0% → normal basin
+  Boolean network validation (100 trials):          0.0% → within Hamming-5 of normal attractor
+  RSP runtime: 4.1s
+
+──────────────────────────────────────────────────────────────────────────────
+  MODULE 3 — TRANSCRIPTIONAL CIP DESIGNER (TCD)
+──────────────────────────────────────────────────────────────────────────────
+  Strategy: Bifunctional TCIP: TF-binding warhead (represses oncogenic TF) + PEG/alkyl linker + epigenetic corep...
+  TCIPs designed: 4
+
+  ╔═══ TCIP: NPM1 repression ═══════════════════════════════════════╗
+  ║  Rationale   : NPMc+ (mutant NPM1) activates HOX/MEIS axis; repression normalises nuc
+  ║  Warhead     : c1ccc(cc1)C(=O)N
+  ║  Linker      : PEG2 (8.5 Å)
+  ║  Corepressor : EZH2 — SAM_competitive
+  ║  Recruiter   : EPZ6438_derivative
+  ║              : CC(C)(CNC(=O)c1ccc(CN2CC(=O)N(c3ccc(Cl)cc3)CC2=O)cc1)c1ccc(N(C)C)
+  ║  Full TCIP   : CN(C)c1ccc(C(C)(CNC(=O)c2ccc(CN3CC(=O)N(c4ccc(Cl)cc4)CC3=O)cc2)COCCOCC
+  ║  Properties  : MW=755.3  logP=4.68  TPSA=143.7  RotB=18  Ro5=✓
+  ╚═════════════════════════════════════════════════════════════════════════╝
+
+  ╔═══ TCIP: CEBPE repression ═══════════════════════════════════════╗
+  ║  Rationale   : CEBPE drives late granulocyte maturation; activation completes the dif
+  ║  Warhead     : c1ccc(cc1)C(=O)N
+  ║  Linker      : PEG2 (8.5 Å)
+  ║  Corepressor : EZH2 — SAM_competitive
+  ║  Recruiter   : EPZ6438_derivative
+  ║              : CC(C)(CNC(=O)c1ccc(CN2CC(=O)N(c3ccc(Cl)cc3)CC2=O)cc1)c1ccc(N(C)C)
+  ║  Full TCIP   : CN(C)c1ccc(C(C)(CNC(=O)c2ccc(CN3CC(=O)N(c4ccc(Cl)cc4)CC3=O)cc2)COCCOCC
+  ║  Properties  : MW=755.3  logP=4.68  TPSA=143.7  RotB=18  Ro5=✓
+  ╚═════════════════════════════════════════════════════════════════════════╝
+
+  ╔═══ TCIP: CDK1 repression ═══════════════════════════════════════╗
+  ║  Rationale   : CDK1 is a key AML repression target.
+  ║  Warhead     : c1ccc(cc1)C(=O)N
+  ║  Linker      : PEG2 (8.5 Å)
+  ║  Corepressor : EZH2 — SAM_competitive
+  ║  Recruiter   : EPZ6438_derivative
+  ║              : CC(C)(CNC(=O)c1ccc(CN2CC(=O)N(c3ccc(Cl)cc3)CC2=O)cc1)c1ccc(N(C)C)
+  ║  Full TCIP   : CN(C)c1ccc(C(C)(CNC(=O)c2ccc(CN3CC(=O)N(c4ccc(Cl)cc4)CC3=O)cc2)COCCOCC
+  ║  Properties  : MW=755.3  logP=4.68  TPSA=143.7  RotB=18  Ro5=✓
+  ╚═════════════════════════════════════════════════════════════════════════╝
+
+  ╔═══ TCIP: CDK6 repression ═══════════════════════════════════════╗
+  ║  Rationale   : CDK6 drives G1/S transition in AML blasts and directly represses IRF4/
+  ║  Warhead     : c1cnc(Nc2ccc3[nH]cnc3c2)nc1
+  ║  Linker      : PEG2 (8.5 Å)
+  ║  Corepressor : EZH2 — SAM_competitive
+  ║  Recruiter   : EPZ6438_derivative
+  ║              : CC(C)(CNC(=O)c1ccc(CN2CC(=O)N(c3ccc(Cl)cc3)CC2=O)cc1)c1ccc(N(C)C)
+  ║  Full TCIP   : CN(C)c1ccc(C(C)(CNC(=O)c2ccc(CN3CC(=O)N(c4ccc(Cl)cc4)CC3=O)cc2)COCCOCC
+  ║  Properties  : MW=845.3  logP=5.99  TPSA=167.1  RotB=19  Ro5=✓
+  ╚═════════════════════════════════════════════════════════════════════════╝
+
+══════════════════════════════════════════════════════════════════════════════
+  OVERALL ASSESSMENT
+══════════════════════════════════════════════════════════════════════════════
+  EXPLORATORY: Switch set identified; requires experimental validation in AML PDX models.
+
+  Predicted reversion probability : 0.0%
+  Boolean validation (100 trials) : 0.0%
+  TCIP molecules designed         : 4
+
+  RECOMMENDED NEXT STEPS:
+  1. Validate TCIP binding affinity vs TF target (SPR/ITC assay)
+  2. Test ternary complex formation (HTRF or AlphaScreen)
+  3. Measure H3K27me3/H3K27ac changes at TF target loci (ChIP-seq)
+  4. Assess differentiation induction in AML cell lines (OCI-AML3, MV4-11)
+  5. Evaluate efficacy in patient-derived xenograft (PDX) AML models
+  6. Test in AML BeatAML cohort scRNA-seq data for patient stratification
+
+  Genes requiring activation (CEBPA, IRF8) are addressed via CRISPRa/mRNA delivery; these are not amenable to TCIP-based repression.
+
+══════════════════════════════════════════════════════════════════════════════
+  END OF ORACLE EXECUTION REPORT
+══════════════════════════════════════════════════════════════════════════════

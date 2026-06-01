@@ -1,0 +1,6 @@
+# RSP Training Configuration
+n_epochs: 200
+batch_size: 64
+learning_rate: 1.0e-3
+n_synthetic_grns: 1000
+n_perturbations_per_grn: 50

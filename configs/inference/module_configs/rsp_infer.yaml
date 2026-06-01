@@ -1,0 +1,4 @@
+max_perturbations: 5
+target_cancer_score: 0.3
+validation_trajectories: 100
+checkpoint_path: "./checkpoints/rsp_gnn.pt"

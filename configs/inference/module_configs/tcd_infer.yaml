@@ -1,0 +1,3 @@
+n_warhead_candidates: 50
+checkpoint_path: "./checkpoints/tcd_diffusion.pt"
+fpocket_path: "/usr/local/bin/fpocket"

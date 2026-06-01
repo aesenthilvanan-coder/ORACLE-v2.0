@@ -1,0 +1,265 @@
+{
+  "oracle_version": "1.0.0",
+  "run_timestamp": "2026-05-21 14:49:00",
+  "cancer_type": "Acute Myeloid Leukemia (AML)",
+  "dataset": {
+    "source": "CellxGene \u2014 15 AML bone marrow donors",
+    "cell_count": 31586,
+    "gene_panel_size": 458,
+    "n_cancer_cells": 11077,
+    "n_normal_cells": 11520,
+    "n_transitional_cells": 8989,
+    "cell_types_cancer": [
+      "Early promyelocyte",
+      "Late promyelocyte",
+      "Myelocyte",
+      "HSCs & MPPs",
+      "Lymphomyeloid progenitor"
+    ],
+    "cell_types_normal": [
+      "Classical monocyte",
+      "Non-classical monocyte",
+      "cDC"
+    ],
+    "genotypes": [
+      "FLT3-ITD/NPM1-mut",
+      "FLT3-wt/NPM1-mut",
+      "APL"
+    ]
+  },
+  "module_1_cam": {
+    "description": "Boolean attractor landscape via asynchronous dynamics",
+    "grn": {
+      "n_nodes": 458,
+      "n_edges": 402,
+      "method": "Curated AML literature edges + expression-correlation edges"
+    },
+    "n_attractors": 2,
+    "attractors": [
+      {
+        "index": 0,
+        "source": "expression_derived",
+        "cancer_score": 1.0,
+        "normal_score": 0.6666666666666666,
+        "n_active_genes": 309,
+        "active_aml_drivers": [
+          "MEIS1",
+          "LMO2",
+          "BCL11A",
+          "SOX4",
+          "CDK6"
+        ],
+        "active_suppressors": [
+          "CEBPA",
+          "CEBPE"
+        ]
+      },
+      {
+        "index": 1,
+        "source": "expression_derived",
+        "cancer_score": 0.2,
+        "normal_score": 0.6666666666666666,
+        "n_active_genes": 97,
+        "active_aml_drivers": [
+          "LMO2"
+        ],
+        "active_suppressors": [
+          "CEBPA",
+          "IRF8"
+        ]
+      }
+    ],
+    "cancer_attractor_index": 0,
+    "normal_attractor_index": 1,
+    "cancer_attractor_profile": {
+      "index": 0,
+      "source": "expression_derived",
+      "cancer_score": 1.0,
+      "normal_score": 0.6666666666666666,
+      "n_active_genes": 309,
+      "active_aml_drivers": [
+        "MEIS1",
+        "LMO2",
+        "BCL11A",
+        "SOX4",
+        "CDK6"
+      ],
+      "active_suppressors": [
+        "CEBPA",
+        "CEBPE"
+      ]
+    },
+    "normal_attractor_profile": {
+      "index": 1,
+      "source": "expression_derived",
+      "cancer_score": 0.2,
+      "normal_score": 0.6666666666666666,
+      "n_active_genes": 97,
+      "active_aml_drivers": [
+        "LMO2"
+      ],
+      "active_suppressors": [
+        "CEBPA",
+        "IRF8"
+      ]
+    },
+    "basin_fractions": {
+      "0": 0.8782,
+      "1": 0.1218
+    },
+    "runtime_attractor_s": 13.36,
+    "runtime_basin_s": 6.8
+  },
+  "module_2_rsp": {
+    "description": "Minimal TF switch set for cancer\u2192normal reversion",
+    "algorithm": "Greedy forward selection + ODE validation",
+    "genes_to_activate": [],
+    "genes_to_repress": [
+      "NPM1",
+      "CEBPE",
+      "CDK1",
+      "CDK6"
+    ],
+    "n_perturbations": 4,
+    "predicted_reversion_probability": 0.0,
+    "validated_reversion_fraction_ode": 0.0,
+    "validated_reversion_fraction_boolean": 0.0,
+    "gene_importance_scores": {
+      "NPM1": 0.25,
+      "CEBPE": 0.25,
+      "CDK1": 0.25,
+      "CDK6": 0.25
+    },
+    "runtime_s": 4.06
+  },
+  "module_3_tcd": {
+    "description": "TCIP molecule design \u2014 epigenetic corepressor recruitment",
+    "strategy": "Bifunctional TCIP: TF-binding warhead (represses oncogenic TF) + PEG/alkyl linker + epigenetic corepressor recruiter (EZH2/HDAC1). Corepressor deposits H3K27me3 (EZH2) or removes H3K27ac (HDAC1) at TF target gene loci, achieving durable epigenetic silencing.",
+    "n_tcips_designed": 4,
+    "tcip_molecules": [
+      {
+        "tf_name": "NPM1",
+        "perturbation_type": "repression",
+        "rationale": "NPMc+ (mutant NPM1) activates HOX/MEIS axis; repression normalises nuclear localization and reduces MEIS1 activation.",
+        "warhead_smiles": "c1ccc(cc1)C(=O)N",
+        "warhead_target": "NPM1 DNA-binding/regulatory domain",
+        "linker_name": "PEG2",
+        "linker_smiles": "[*]OCCOCCO[*]",
+        "linker_length_A": 8.5,
+        "corepressor": "EZH2",
+        "corepressor_mechanism": "SAM_competitive",
+        "corepressor_binding_protein": "EZH2_SET_domain",
+        "recruiter_smiles": "CC(C)(CNC(=O)c1ccc(CN2CC(=O)N(c3ccc(Cl)cc3)CC2=O)cc1)c1ccc(N(C)C)cc1",
+        "recruiter_scaffold": "EPZ6438_derivative",
+        "full_tcip_smiles": "CN(C)c1ccc(C(C)(CNC(=O)c2ccc(CN3CC(=O)N(c4ccc(Cl)cc4)CC3=O)cc2)COCCOCCOc2ccc(C(N)=O)cc2)cc1",
+        "properties": {
+          "MW": 755.31,
+          "LogP": 4.68,
+          "HBD": 2,
+          "HBA": 8,
+          "TPSA": 143.74,
+          "RotatableBonds": 18,
+          "Ro5_extended_compliant": true,
+          "n_fragments": 1
+        },
+        "selection_score": 0.5800000000000001
+      },
+      {
+        "tf_name": "CEBPE",
+        "perturbation_type": "repression",
+        "rationale": "CEBPE drives late granulocyte maturation; activation completes the differentiation program.",
+        "warhead_smiles": "c1ccc(cc1)C(=O)N",
+        "warhead_target": "CEBPE DNA-binding/regulatory domain",
+        "linker_name": "PEG2",
+        "linker_smiles": "[*]OCCOCCO[*]",
+        "linker_length_A": 8.5,
+        "corepressor": "EZH2",
+        "corepressor_mechanism": "SAM_competitive",
+        "corepressor_binding_protein": "EZH2_SET_domain",
+        "recruiter_smiles": "CC(C)(CNC(=O)c1ccc(CN2CC(=O)N(c3ccc(Cl)cc3)CC2=O)cc1)c1ccc(N(C)C)cc1",
+        "recruiter_scaffold": "EPZ6438_derivative",
+        "full_tcip_smiles": "CN(C)c1ccc(C(C)(CNC(=O)c2ccc(CN3CC(=O)N(c4ccc(Cl)cc4)CC3=O)cc2)COCCOCCOc2ccc(C(N)=O)cc2)cc1",
+        "properties": {
+          "MW": 755.31,
+          "LogP": 4.68,
+          "HBD": 2,
+          "HBA": 8,
+          "TPSA": 143.74,
+          "RotatableBonds": 18,
+          "Ro5_extended_compliant": true,
+          "n_fragments": 1
+        },
+        "selection_score": 0.5800000000000001
+      },
+      {
+        "tf_name": "CDK1",
+        "perturbation_type": "repression",
+        "rationale": "CDK1 is a key AML repression target.",
+        "warhead_smiles": "c1ccc(cc1)C(=O)N",
+        "warhead_target": "CDK1 DNA-binding/regulatory domain",
+        "linker_name": "PEG2",
+        "linker_smiles": "[*]OCCOCCO[*]",
+        "linker_length_A": 8.5,
+        "corepressor": "EZH2",
+        "corepressor_mechanism": "SAM_competitive",
+        "corepressor_binding_protein": "EZH2_SET_domain",
+        "recruiter_smiles": "CC(C)(CNC(=O)c1ccc(CN2CC(=O)N(c3ccc(Cl)cc3)CC2=O)cc1)c1ccc(N(C)C)cc1",
+        "recruiter_scaffold": "EPZ6438_derivative",
+        "full_tcip_smiles": "CN(C)c1ccc(C(C)(CNC(=O)c2ccc(CN3CC(=O)N(c4ccc(Cl)cc4)CC3=O)cc2)COCCOCCOc2ccc(C(N)=O)cc2)cc1",
+        "properties": {
+          "MW": 755.31,
+          "LogP": 4.68,
+          "HBD": 2,
+          "HBA": 8,
+          "TPSA": 143.74,
+          "RotatableBonds": 18,
+          "Ro5_extended_compliant": true,
+          "n_fragments": 1
+        },
+        "selection_score": 0.5800000000000001
+      },
+      {
+        "tf_name": "CDK6",
+        "perturbation_type": "repression",
+        "rationale": "CDK6 drives G1/S transition in AML blasts and directly represses IRF4/CEBPA via non-catalytic mechanism.",
+        "warhead_smiles": "c1cnc(Nc2ccc3[nH]cnc3c2)nc1",
+        "warhead_target": "CDK6 DNA-binding/regulatory domain",
+        "linker_name": "PEG2",
+        "linker_smiles": "[*]OCCOCCO[*]",
+        "linker_length_A": 8.5,
+        "corepressor": "EZH2",
+        "corepressor_mechanism": "SAM_competitive",
+        "corepressor_binding_protein": "EZH2_SET_domain",
+        "recruiter_smiles": "CC(C)(CNC(=O)c1ccc(CN2CC(=O)N(c3ccc(Cl)cc3)CC2=O)cc1)c1ccc(N(C)C)cc1",
+        "recruiter_scaffold": "EPZ6438_derivative",
+        "full_tcip_smiles": "CN(C)c1ccc(C(C)(CNC(=O)c2ccc(CN3CC(=O)N(c4ccc(Cl)cc4)CC3=O)cc2)COCCOCCOc2cnc(Nc3ccc4[nH]cnc4c3)nc2)cc1",
+        "properties": {
+          "MW": 845.34,
+          "LogP": 5.99,
+          "HBD": 3,
+          "HBA": 11,
+          "TPSA": 167.14,
+          "RotatableBonds": 19,
+          "Ro5_extended_compliant": true,
+          "n_fragments": 1
+        },
+        "selection_score": 0.5800000000000001
+      }
+    ]
+  },
+  "overall_assessment": {
+    "verdict": "EXPLORATORY: Switch set identified; requires experimental validation in AML PDX models.",
+    "predicted_reversion_probability": 0.0,
+    "boolean_validation_reversion_fraction": 0.0,
+    "n_tcip_molecules_designed": 4,
+    "recommended_next_steps": [
+      "Validate TCIP binding affinity vs TF target (SPR/ITC assay)",
+      "Test ternary complex formation (HTRF or AlphaScreen)",
+      "Measure H3K27me3/H3K27ac changes at TF target loci (ChIP-seq)",
+      "Assess differentiation induction in AML cell lines (OCI-AML3, MV4-11)",
+      "Evaluate efficacy in patient-derived xenograft (PDX) AML models",
+      "Test in AML BeatAML cohort scRNA-seq data for patient stratification"
+    ],
+    "note_on_activation_targets": "Genes requiring activation (CEBPA, IRF8) are addressed via CRISPRa/mRNA delivery; these are not amenable to TCIP-based repression."
+  }
+}

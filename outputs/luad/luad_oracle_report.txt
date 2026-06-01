@@ -1,0 +1,121 @@
+======================================================================
+ORACLE V2.0 — LUAD Epigenetic Reversion Report
+Generated: 2026-05-27 23:27 UTC
+Runtime:   6.4 s
+======================================================================
+
+CANCER TYPE:  Lung Adenocarcinoma (LUAD)
+PRIMARY DATA: GSE131907 (Kim et al. 2020, Nat Comm; 208,506 cells)
+GENETIC CONTEXT:
+  • KRAS G12C/D/V — constitutively active (40% of LUAD)
+    ⚠  Cannot be epigenetically rescued; recommend sotorasib/adagrasib
+  • STK11/LKB1 — loss of function (dysregulates Hippo/YAP axis)
+  • TP53 — hotspot mutation (partial loss; ~50% co-occurrence)
+
+──────────────────────────────────────────────────────────────────────
+MODULE 1 — Cancer Attractor Mapper (CAM)
+──────────────────────────────────────────────────────────────────────
+  Boolean attractors found:   2
+  Cancer basin size:          50.0%
+  Normal basin size:          50.0%
+
+  Cancer attractor active oncogenes:
+    MYC          ON 
+    YAP1         ON 
+    WWTR1        ON 
+    SNAI2        ON 
+    ZEB1         ON 
+    ZEB2         off
+    TWIST1       off
+    SOX9         ON 
+    E2F1         ON 
+    FOSL1        ON 
+    TEAD1        ON 
+
+  Normal (AT2) attractor differentiation TFs:
+    NKX2-1       off
+    FOXA1        off
+    FOXA2        ON 
+    ETV5         ON 
+    SFTPC        ON 
+    SFTPB        ON 
+    ABCA3        ON 
+
+──────────────────────────────────────────────────────────────────────
+MODULE 2 — Reversion Switch Predictor (RSP)
+──────────────────────────────────────────────────────────────────────
+  Predicted reversion prob:    10.1%
+  ODE-validated reversion:     0.0%
+  Boolean reversion:           0.0%
+  Predicted cancer score after: 0.799
+
+  GENES TO ACTIVATE (restore AT2 identity):
+    FOXA2           importance=1.000
+
+  GENES TO REPRESS (silence oncogenic program):
+    BRD4            importance=1.000
+    WWTR1           importance=1.000
+    YAP1            importance=1.000
+    EZH2            importance=1.000
+
+──────────────────────────────────────────────────────────────────────
+MODULE 3 — TCIP Design
+──────────────────────────────────────────────────────────────────────
+  Total TCIP molecules designed: 5
+  Hard constraints passed:       5/5
+
+  Hard constraints (TCIP/bRo5 relaxed — must pass ALL):
+    1. Lipinski Ro5     MW<=1000, logP<=6, HBD<=6, HBA<=15 (>= 3/4)
+    2. Veber            RotBonds<=25, TPSA<=250 A^2
+    3. Ghose Filter     MW 160-1000, logP -0.4 to 6.0, MR 40-300, atoms 20-120
+    4. Egan             logP<=7, TPSA<=250 A^2
+    5. QED >= 0.04 (bifunctionals inherently score 0.04-0.25)
+    6. Linker atoms     5-20 heavy atoms
+    7. SAS <= 7.0
+    8. PAINS filter     no pan-assay interference substructures
+    9. Brenk filter     no reactive/toxic groups (PEG/hydroxamate whitelisted)
+   10. Ames alerts      no mutagenicity structural alerts (indole whitelisted)
+
+  [REPRESS] BRD4 -> HDAC1  [PASS]
+    TCIP SMILES: Cc1sc2ccccc2c1-c1cc2nc(C)n(CC(=O)N3CCC[C@H]3C(=O)N(CC(=O)NCCOCCOCCC(=O)NC(=O)CCCCCCC(=O)NO)C(C)C)c(=O)n2n1
+    MW=880.0  logP=2.65  TPSA=236  QED=0.05  SAS=4.2  HBD=4  HBA=13  RotB=23  Ro5=PASS
+    Rationale: Repress BRD4 in LUAD: warhead binds BRD4 TF/enzymatic pocket; linker bridges to HDAC1 recruiter for epigenetic silencing at BRD4 target loci.
+
+  [REPRESS] WWTR1 -> EZH2  [PASS]
+    TCIP SMILES: CC(=O)Nc1ccc(C(=O)N2CCC(NC(=O)CCOCCOCCNC(=O)CN(C(=O)c3ccc4[nH]c5ccccc5c4c3)c3ccc(F)cc3)CC2)cc1
+    MW=764.9  logP=5.03  TPSA=162  QED=0.10  SAS=3.1  HBD=4  HBA=7  RotB=16  Ro5=PASS
+    Rationale: Repress WWTR1 in LUAD: warhead binds WWTR1 TF/enzymatic pocket; linker bridges to EZH2 recruiter for epigenetic silencing at WWTR1 target loci.
+
+  [REPRESS] YAP1 -> EZH2  [PASS]
+    TCIP SMILES: CC(=O)Nc1ccc(C(=O)N2CCC(NC(=O)CCOCCOCCNC(=O)CN(C(=O)c3cccc(F)c3)c3cc(=O)c4ccccc4o3)CC2)cc1
+    MW=743.8  logP=3.50  TPSA=177  QED=0.15  SAS=3.1  HBD=3  HBA=9  RotB=16  Ro5=PASS
+    Rationale: Repress YAP1 in LUAD: warhead binds YAP1 TF/enzymatic pocket; linker bridges to EZH2 recruiter for epigenetic silencing at YAP1 target loci.
+
+  [REPRESS] EZH2 -> HDAC1  [PASS]
+    TCIP SMILES: CC(=O)N(CC(=O)NCCOCCOCCC(=O)NC(=O)CCCCCCC(=O)NO)c1ccc(C(=O)N2CCC(N3CCOCC3)CC2)cc1
+    MW=718.8  logP=1.00  TPSA=196  QED=0.08  SAS=3.2  HBD=4  HBA=11  RotB=21  Ro5=PASS
+    Rationale: Repress EZH2 in LUAD: warhead binds EZH2 TF/enzymatic pocket; linker bridges to HDAC1 recruiter for epigenetic silencing at EZH2 target loci.
+
+  [ACTIVATE] FOXA2 -> p300  [PASS]
+    TCIP SMILES: O=C(CN(C(=O)c1cccnc1)c1ccc(F)cc1)NCCOCCCC(=O)Nc1ccc(C(=O)c2ccc(Nc3ncnc4[nH]ccc34)cc2)cc1
+    MW=714.8  logP=5.67  TPSA=171  QED=0.07  SAS=3.0  HBD=4  HBA=9  RotB=16  Ro5=PASS
+    Rationale: Activate FOXA2 in LUAD AT2 redifferentiation: warhead tethers to FOXA2 promoter region; p300 recruiter deposits H3K27ac to reopen AT2 gene loci silenced by EZH2/HDAC1.
+
+──────────────────────────────────────────────────────────────────────
+THERAPEUTIC STRATEGY SUMMARY
+──────────────────────────────────────────────────────────────────────
+The ORACLE analysis identifies a minimal TF perturbation set to
+drive KRAS-mutant LUAD cells from the cancer Waddington attractor
+back toward the AT2 (alveolar type II) normal lung identity.
+
+Recommended combination approach:
+  1. KRAS G12C: Sotorasib (AMG-510) or Adagrasib (MRTX849) — direct
+     KRAS G12C covalent inhibitor as companion.
+  2. TCIPs targeting the epigenetic switch set above — bifunctional
+     molecules that simultaneously silence oncogenic TFs and re-activate
+     NKX2-1/FOXA1/FOXA2 AT2 identity programme.
+  3. EZH2 inhibitor (EPZ-6438/tazemetostat) to remove H3K27me3
+     from NKX2-1/SFTPC loci silenced during dedifferentiation.
+
+Pipeline completed in 6.4 s
+======================================================================

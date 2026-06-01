@@ -1,0 +1,4 @@
+grn_size: 100
+n_attractor_samples: 10000
+integration_time: 50.0
+n_ode_steps: 200

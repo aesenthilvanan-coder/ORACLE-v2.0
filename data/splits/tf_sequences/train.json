@@ -1,0 +1,33 @@
+{
+  "split": "train",
+  "ids": [
+    "CTNNB1",
+    "OCT4",
+    "SMAD4",
+    "STAT3",
+    "ESR1",
+    "GATA1",
+    "TAZ",
+    "SOX2",
+    "VHL",
+    "RB1",
+    "SPI1",
+    "SNAI1",
+    "SNAI2",
+    "NANOG",
+    "AR",
+    "NFKB1",
+    "OLIG2",
+    "HIF1A",
+    "GATA3",
+    "NRF2",
+    "BRCA1",
+    "MITF",
+    "FOXO3",
+    "CEBPA",
+    "PAX3",
+    "EZH2",
+    "YAP1",
+    "TP53"
+  ]
+}

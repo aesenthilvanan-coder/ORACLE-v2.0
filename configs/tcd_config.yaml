@@ -1,0 +1,13 @@
+# TCD Module Configuration
+mol_hidden_dim: 256
+mol_n_layers: 8
+n_diffusion_steps: 1000
+distance_cutoff: 10.0
+n_warhead_atoms: 25
+n_warhead_candidates: 50
+max_clash_score: 10.0
+max_interface_energy: -5.0
+max_sa_score: 6.0
+checkpoint_path: "./checkpoints/tcd_diffusion.pt"
+fpocket_path: "/usr/local/bin/fpocket"
+openmm_platform: "CPU"

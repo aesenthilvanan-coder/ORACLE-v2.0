@@ -1,0 +1,11 @@
+# RSP Module Configuration
+hidden_dim: 256
+n_gnn_layers: 6
+n_attention_heads: 8
+max_perturbations: 5
+target_cancer_score: 0.3
+normal_threshold: 0.3
+validation_trajectories: 100
+integration_time: 100.0
+n_steps: 500
+checkpoint_path: "./checkpoints/rsp_gnn.pt"
